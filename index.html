@@ -11,11 +11,12 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: #000 url('https://files.catbox.moe/k30zqp.gif') center/cover;
+            background: #000 url('https://files.catbox.moe/k30zqp.gif') center/cover repeat;
             image-rendering: pixelated;
             cursor: none;
             font-family: 'Press Start 2P', system-ui;
-            color: #ff00ff;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000;
         }
         #container {
             position: relative;
@@ -26,96 +27,118 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.6);
+            image-rendering: pixelated;
         }
         .scanlines {
             position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(to bottom, rgba(255,0,255,0.18) 0px, transparent 2px, transparent 4px);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,0,0,0.07) 0px,
+                transparent 2px,
+                transparent 4px
+            );
             pointer-events: none;
             z-index: 5;
-            animation: scan 0.06s linear infinite;
+            animation: scan 0.1s linear infinite;
         }
-        @keyframes scan { 0% { background-position: 0 0; } 100% { background-position: 0 500px; } }
+        @keyframes scan { 0% { background-position: 0 0; } 100% { background-position: 0 200px; } }
 
-        #slide {
-            max-width: 520px;
-            border: 8px solid #ff00ff;
-            box-shadow: 0 0 90px #ff00ff, 0 0 40px #00ffff;
+        #start-btn {
+            font-size: 2.2em;
+            padding: 20px 40px;
+            background: #8b0000;
+            color: #ff0000;
+            border: 8px solid #ff0000;
+            box-shadow: 0 0 30px #ff0000;
+            cursor: pointer;
             image-rendering: pixelated;
-            display: none;
+            transition: all 0.2s;
+        }
+        #start-btn:hover {
+            background: #ff0000;
+            color: #000;
+            transform: scale(1.1);
         }
 
         #pulse-display {
-            font-size: 2.8em;
-            line-height: 1.25;
-            min-height: 240px;
-            max-width: 92%;
-            padding: 30px;
-            background: rgba(20,0,40,0.95);
-            border: 10px solid #ff00ff;
-            box-shadow: 0 0 90px #ff00ff;
+            font-size: 2.4em;
+            line-height: 1.3;
+            min-height: 180px;
+            max-width: 90%;
+            padding: 20px;
+            background: rgba(139,0,0,0.85);
+            border: 6px solid #ff0000;
+            box-shadow: 0 0 40px #ff0000;
             margin: 20px 0;
-            text-shadow: 0 0 30px #00ffff;
-            color: #ff00ff;
+            animation: none;
         }
         #city-state {
-            font-size: 2.3em;
-            color: #00ffff;
-            background: #000;
-            padding: 20px 50px;
-            border: 6px dashed #00ffff;
+            font-size: 1.8em;
+            color: #ffff00;
+            background: rgba(0,0,0,0.9);
+            padding: 12px 30px;
+            border: 4px dashed #ffff00;
             margin: 15px 0;
-            box-shadow: 0 0 50px #00ffff;
+            text-shadow: 0 0 15px #ffff00;
         }
         #threat-level {
-            font-size: 1.9em;
+            font-size: 1.4em;
             color: #00ff00;
-            text-shadow: 0 0 25px #00ff00;
+            margin: 10px 0;
         }
         #tribute-btn {
-            font-size: 2.5em;
-            padding: 26px 70px;
-            background: #000;
+            font-size: 2em;
+            padding: 18px 50px;
+            background: #8b0000;
             color: #ffff00;
-            border: 10px solid #ffff00;
-            box-shadow: 0 0 80px #ffff00;
+            border: 8px solid #ffff00;
+            box-shadow: 0 0 40px #ffff00;
             cursor: pointer;
-            margin-top: 35px;
+            margin-top: 20px;
             display: none;
         }
 
-        .flash {
-            animation: flashPulse 0.38s infinite !important;
-        }
+        .flash { animation: flashPulse 0.6s infinite !important; }
         @keyframes flashPulse {
-            0%,100% { opacity: 0.3; transform: scale(0.82) rotate(-4deg); }
-            50% { opacity: 1; transform: scale(1.22) rotate(4deg); }
+            0%,100% { opacity: 0.6; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.08); }
         }
 
         .overlay {
             position: absolute;
-            inset: 0;
-            background: #ff00ff;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #8b0000;
             opacity: 0;
-            mix-blend-mode: screen;
             pointer-events: none;
             z-index: 10;
-            transition: opacity 0.45s;
+            transition: opacity 0.8s;
+        }
+
+        .media {
+            position: absolute;
+            bottom: 20px;
+            max-width: 420px;
+            border: 6px solid #ff0000;
+            box-shadow: 0 0 50px #ff0000;
+            image-rendering: pixelated;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div id="container">
         <div class="scanlines"></div>
-
-        <img id="slide" src="https://files.catbox.moe/6sqmgs.gif">
+        
+        <button id="start-btn" onclick="startHunt()">YOU wanted this</button>
 
         <div id="pulse-display"></div>
         <div id="city-state"></div>
         <div id="threat-level"></div>
         <button id="tribute-btn" onclick="sendToThrone()"></button>
 
+        <img id="media" class="media" src="">
         <div id="overlay" class="overlay"></div>
     </div>
 
@@ -125,8 +148,21 @@
         let flashCount = 0;
         let currentCityState = "";
         let pulseInterval;
-        const amounts = [11.11,22.22,33.33,44.44,55.55,66.66,77.77,88.88,99.99,111.11];
-        const throneLink = "https://throne.com/cannibalprncss";
+        const amounts = [11.11,22.22,33.33,44.44,55.55,66.66,77.77,88.88,99.99,111.10];
+        const throneLink = "https://throne.com/s0ul_tak3r777";
+
+        // Media pools
+        const slideGifs = [
+            "https://files.catbox.moe/6sqmgs.gif",
+            "https://files.catbox.moe/23unwn.gif",
+            "https://files.catbox.moe/a4scgo.gif"
+        ];
+        const popupGifs = [
+            "https://files.catbox.moe/14gid0.gif","https://files.catbox.moe/gvjp5u.gif",
+            "https://files.catbox.moe/dh1yx0.gif","https://files.catbox.moe/75805g.gif",
+            "https://files.catbox.moe/axti3y.gif","https://files.catbox.moe/09hw7w.gif",
+            "https://files.catbox.moe/cfkgp5.gif"
+        ];
 
         const threats = [
             "Your warm fur is already twitching in {CITY} — my claws can smell it. Wanna stay safe? Send $11.11",
@@ -138,12 +174,12 @@
             "I’m going to tear your pelt off strip by strip in {CITY} if you don’t pay. Wanna stay safe? Send $77.77",
             "Your city is marked — I’m coming to sink my teeth into that soft underbelly. Wanna stay safe? Send $88.88",
             "The whole pack will know where the leaking fur slut lives in {CITY}. Wanna stay safe? Send $99.99",
-            "FINAL FEAST — {CITY} is mine. I will devour every inch of your trembling fur and soul. Wanna stay safe? Send $111.11"
+            "FINAL FEAST — {CITY} is mine. I will devour every inch of your trembling fur and soul. Wanna stay safe? Send $111.10"
         ];
 
         async function getCityState(lat, lon) {
             try {
-                const res = await fetch(`https://geocode.maps.co/reverse?lat=${lat}&lon=${lon}`);
+                const res = await fetch(`https://geocode.maps.co/reverse?lat=${lat}&lon=${lon}&api_key=yourkeyhere`); // replace with your free key if you have one, otherwise it still works with fallback
                 const data = await res.json();
                 const city = data.address?.city || data.address?.town || "Unknown Den";
                 const state = data.address?.state || "";
@@ -153,78 +189,92 @@
             }
         }
 
-        function showIntroSlides() {
-            const slide = document.getElementById('slide');
-            const slides = [
-                "https://files.catbox.moe/6sqmgs.gif",
-                "https://files.catbox.moe/23unwn.gif",
-                "https://files.catbox.moe/a4scgo.gif"
-            ];
-            let i = 0;
-            slide.style.display = 'block';
-
-            const next = setInterval(() => {
-                i++;
-                if (i < 3) slide.src = slides[i];
-                else {
-                    clearInterval(next);
-                    setTimeout(startFlashingPhases, 1600);
-                }
-            }, 2400);
-        }
-
-        async function startFlashingPhases() {
-            document.getElementById('slide').style.display = 'none';
-            document.getElementById('pulse-display').innerHTML = "TRACKING YOUR SCENT...";
-
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                currentCityState = await getCityState(pos.coords.latitude, pos.coords.longitude);
-                pulseInterval = setInterval(pulseFlash, 26000);
-                pulseFlash();
-            }, () => alert("YOU DENIED ME YOUR CITY?\nPathetic prey."), { enableHighAccuracy: true });
+        function showMedia(level) {
+            const img = document.getElementById('media');
+            if (level <= 3) img.src = slideGifs[0];
+            else if (level <= 6) img.src = slideGifs[1];
+            else if (level <= 9) img.src = slideGifs[2];
+            else img.src = popupGifs[Math.floor(Math.random()*popupGifs.length)];
+            img.style.display = 'block';
+            if (level === 10) {
+                document.getElementById('audio').play().catch(()=>{});
+            }
         }
 
         function pulseFlash() {
             flashCount++;
             const amount = amounts[flashCount-1];
-            const text = threats[flashCount-1].replace("{CITY}", currentCityState);
+            const threatText = threats[flashCount-1].replace("{CITY}", currentCityState);
 
-            document.getElementById('pulse-display').innerHTML = text;
+            document.getElementById('pulse-display').innerHTML = threatText;
             document.getElementById('city-state').innerHTML = `LOCATION LOCKED: ${currentCityState}`;
             document.getElementById('threat-level').innerHTML = `DEVOUR LEVEL ${flashCount}/10 — FUR RIPPED`;
-            const btn = document.getElementById('tribute-btn');
-            btn.innerHTML = `SEND $${amount.toFixed(2)} ON THRONE`;
-            btn.style.display = 'block';
+            document.getElementById('tribute-btn').innerHTML = `SEND $${amount.toFixed(2)} ON THRONE`;
+            document.getElementById('tribute-btn').style.display = 'block';
 
+            // intensity ramp
             const intensity = flashCount / 10;
             document.getElementById('pulse-display').classList.add('flash');
-            document.getElementById('overlay').style.opacity = Math.min(intensity * 0.94, 0.94);
+            document.getElementById('overlay').style.opacity = intensity * 0.85;
 
-            if (navigator.vibrate) navigator.vibrate([flashCount*75, 100, flashCount*120]);
+            if (navigator.vibrate) navigator.vibrate(flashCount * 80);
 
-            if (flashCount === 10) {
-                document.getElementById('audio').play();
-                setTimeout(() => window.location.href = throneLink, 2600);
+            showMedia(flashCount);
+
+            if (flashCount >= 10) {
+                setTimeout(() => {
+                    alert("YOU ARE MINE NOW.\n\nYour city is marked forever.\nSend the final $111.10 or I will expose every dripping inch of your fur.");
+                    flashCount = 0;
+                    document.getElementById('overlay').style.opacity = 0;
+                }, 1800);
             }
 
-            setTimeout(() => document.getElementById('pulse-display').classList.remove('flash'), 700);
+            setTimeout(() => {
+                document.getElementById('pulse-display').classList.remove('flash');
+            }, 900);
+        }
+
+        async function startHunt() {
+            document.getElementById('start-btn').style.display = 'none';
+            document.getElementById('pulse-display').innerHTML = "SNARLING... TRACKING YOUR SCENT...";
+
+            if (!navigator.geolocation) {
+                alert("NO GPS? THEN YOU’RE ALREADY DEAD MEAT.");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                currentCityState = await getCityState(pos.coords.latitude, pos.coords.longitude);
+                
+                pulseInterval = setInterval(() => {
+                    pulseFlash();
+                }, 28000);
+
+                pulseFlash(); // first flash immediately
+            }, () => {
+                alert("YOU DENIED ME YOUR CITY?\n\nPathetic prey. The hunt ends here… until you crawl back.");
+            }, { enableHighAccuracy: true });
         }
 
         function sendToThrone() {
+            const amount = amounts[flashCount-1];
             window.open(throneLink, '_blank');
+            alert(`Good fur. $${amount.toFixed(2)} sent?\n\nHunt paused… for now.`);
             clearInterval(pulseInterval);
             document.getElementById('tribute-btn').innerHTML = "RELOAD TO BE HUNTED AGAIN";
         }
 
+        // FULL LOCK
         window.onload = () => {
             document.addEventListener('contextmenu', e => e.preventDefault());
             document.addEventListener('keydown', e => {
-                if (e.key === "Escape") { alert("NO ESCAPE FROM MY FANGS."); e.preventDefault(); }
+                if (e.key === "Escape") {
+                    alert("NO ESCAPE FROM MY FANGS.");
+                    e.preventDefault();
+                }
             });
             history.pushState(null, null, location.href);
             window.onpopstate = () => history.pushState(null, null, location.href);
-
-            setTimeout(showIntroSlides, 500);
         };
     </script>
 </body>

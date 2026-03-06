@@ -27,162 +27,162 @@ body { margin:0; padding:0; overflow:hidden; background:#000 url('https://files.
 </head>
 <body>
 <div id="container">
-    <div class="scanlines"></div>
-    <div id="tribute-float" onclick="window.open('https://throne.com/cannibalprncss','_blank')">THRONE</div>
+    <div class="scanlines"></div>
+    <div id="tribute-float" onclick="window.open('https://throne.com/cannibalprncss','_blank')">THRONE</div>
 
-    <video id="video" autoplay playsinline muted></video>
+    <video id="video" autoplay playsinline muted></video>
 
-    <div id="start-paw" onclick="startHunt()">
-        <img src="https://files.catbox.moe/070iyo.mov" style="width:360px;">
-        <div id="start-text">YOU wanted this</div>
-    </div>
+    <div id="start-paw" onclick="startHunt()">
+        <img src="https://files.catbox.moe/070iyo.mov" style="width:360px;">
+        <div id="start-text">YOU wanted this</div>
+    </div>
 
-    <div id="state-display"></div>
+    <div id="state-display"></div>
 
-    <div id="progress-container">
-        <div id="progress-bar"></div>
-        <div id="progress-text">PAWRRUPTIN 0%</div>
-    </div>
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+        <div id="progress-text">PAWRRUPTIN 0%</div>
+    </div>
 
-    <div id="virus-window" class="virus-window">
-        <div class="virus-titlebar">POPUP DETECTED — PREY LOCATED</div>
-        <div class="virus-content"><img id="virus-gif" src="" style="width:100%;"></div>
-    </div>
+    <div id="virus-window" class="virus-window">
+        <div class="virus-titlebar">POPUP DETECTED — PREY LOCATED</div>
+        <div class="virus-content"><img id="virus-gif" src="" style="width:100%;"></div>
+    </div>
 
-    <div id="pulse-display" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:3.1em; text-align:center; max-width:80%; color:#ff00ff; z-index:25; display:none;"></div>
+    <div id="pulse-display" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:3.1em; text-align:center; max-width:80%; color:#ff00ff; z-index:25; display:none;"></div>
 </div>
 
 <audio id="audio" src="https://files.catbox.moe/of5w5z.mp3" preload="auto"></audio>
 
 <script>
-// === YOUR IPSTACK ACCESS KEY ===
-const IPSTACK_KEY = "e64d4ab4c8f2dc96a03ced174c30ed7f"; // ← this is where your key goes
+// === PUT YOUR IPSTACK KEY HERE ===
+const IPSTACK_KEY = "YOUR_ACCESS_KEY_HERE"; // ← replace with e64d4ab4c8f2dc96a03ced174c30ed7f
 
 let flashCount = 0;
 let userLocation = {city:'', state:'', country:''};
 const popupGifs = [
-    "https://files.catbox.moe/14gid0.gif",
-    "https://files.catbox.moe/gvjp5u.gif",
-    "https://files.catbox.moe/dh1yx0.gif",
-    "https://files.catbox.moe/75805g.gif",
-    "https://files.catbox.moe/axti3y.gif",
-    "https://files.catbox.moe/09hw7w.gif",
-    "https://files.catbox.moe/cfkgp5.gif"
+    "https://files.catbox.moe/14gid0.gif",
+    "https://files.catbox.moe/gvjp5u.gif",
+    "https://files.catbox.moe/dh1yx0.gif",
+    "https://files.catbox.moe/75805g.gif",
+    "https://files.catbox.moe/axti3y.gif",
+    "https://files.catbox.moe/09hw7w.gif",
+    "https://files.catbox.moe/cfkgp5.gif"
 ];
 
 const threats = [
-    "Your location: {CITY}, {STATE} — stay sharp $11.11",
-    "Scanning {CITY}, {STATE}... keep alert $22.22",
-    "Detected activity near {CITY}, {STATE} — remain vigilant $33.33",
-    "Tracking patterns in {CITY}, {STATE} — don't stray $44.44",
-    "Final alert for {CITY}, {STATE} — proceed cautiously $55.55",
-    "Monitoring {CITY}, {STATE} — maintain cover $66.66",
-    "Observation complete: {CITY}, {STATE} — stay hidden $77.77",
-    "Location marked: {CITY}, {STATE} — be ready $88.88",
-    "System finalized for {CITY}, {STATE} — vigilance required $99.99",
-    "End of scan {CITY}, {STATE} — mission complete $111.11"
+    "Your location: {CITY}, {STATE} — stay sharp $11.11",
+    "Scanning {CITY}, {STATE}... keep alert $22.22",
+    "Detected activity near {CITY}, {STATE} — remain vigilant $33.33",
+    "Tracking patterns in {CITY}, {STATE} — don't stray $44.44",
+    "Final alert for {CITY}, {STATE} — proceed cautiously $55.55",
+    "Monitoring {CITY}, {STATE} — maintain cover $66.66",
+    "Observation complete: {CITY}, {STATE} — stay hidden $77.77",
+    "Location marked: {CITY}, {STATE} — be ready $88.88",
+    "System finalized for {CITY}, {STATE} — vigilance required $99.99",
+    "End of scan {CITY}, {STATE} — mission complete $111.11"
 ];
 
 const videos = [
-    "https://files.catbox.moe/070iyo.mov",
-    "https://files.catbox.moe/rtw280.mp4",
-    "https://files.catbox.moe/ykncjz.mp4"
+    "https://files.catbox.moe/070iyo.mov",
+    "https://files.catbox.moe/rtw280.mp4",
+    "https://files.catbox.moe/ykncjz.mp4"
 ];
 
 function showIntroVideos() {
-    const video = document.getElementById('video');
-    let i = 0;
-    video.src = videos[0];
-    video.style.display = 'block';
-    video.play();
+    const video = document.getElementById('video');
+    let i = 0;
+    video.src = videos[0];
+    video.style.display = 'block';
+    video.play();
 
-    video.onended = () => {
-        i++;
-        if (i < 3) {
-            video.src = videos[i];
-            video.play();
-        } else {
-            video.style.display = 'none';
-            document.getElementById('start-paw').style.display = 'block';
-        }
-    };
+    video.onended = () => {
+        i++;
+        if (i < 3) {
+            video.src = videos[i];
+            video.play();
+        } else {
+            video.style.display = 'none';
+            document.getElementById('start-paw').style.display = 'block';
+        }
+    };
 }
 
 function startHunt() {
-    document.getElementById('start-paw').style.display = 'none';
+    document.getElementById('start-paw').style.display = 'none';
 
-    fetch(`http://api.ipstack.com/check?access_key=${IPSTACK_KEY}`)
-        .then(res => res.json())
-        .then(data => {
-            userLocation.city = data.city || "Unknown";
-            userLocation.state = data.region_name || "Unknown";
-            userLocation.country = data.country_name || "Unknown";
+    fetch(`http://api.ipstack.com/check?access_key=${IPSTACK_KEY}`)
+        .then(res => res.json())
+        .then(data => {
+            userLocation.city = data.city || "Unknown";
+            userLocation.state = data.region_name || "Unknown";
+            userLocation.country = data.country_name || "Unknown";
 
-            document.getElementById('state-display').innerText = `LOCATION: ${userLocation.city}, ${userLocation.state}`;
-            document.getElementById('state-display').style.display = 'block';
-            
-            setTimeout(startPhases, 1400);
-        })
-        .catch(() => alert("Unable to get location data from IPSTACK"));
+            document.getElementById('state-display').innerText = `LOCATION: ${userLocation.city}, ${userLocation.state}`;
+            document.getElementById('state-display').style.display = 'block';
+            
+            setTimeout(startPhases, 1400);
+        })
+        .catch(() => alert("Unable to get location data from IPSTACK"));
 }
 
 function startPhases() {
-    document.getElementById('audio').play().catch(() => {});
-    document.getElementById('pulse-display').style.display = 'block';
-    setInterval(pulseFlash, 19000);
-    pulseFlash();
+    document.getElementById('audio').play().catch(() => {});
+    document.getElementById('pulse-display').style.display = 'block';
+    setInterval(pulseFlash, 19000);
+    pulseFlash();
 }
 
 function pulseFlash() {
-    flashCount++;
-    const text = threats[flashCount-1]
-        .replace("{CITY}", userLocation.city)
-        .replace("{STATE}", userLocation.state);
+    flashCount++;
+    const text = threats[flashCount-1]
+        .replace("{CITY}", userLocation.city)
+        .replace("{STATE}", userLocation.state);
 
-    document.getElementById('pulse-display').innerText = text;
+    document.getElementById('pulse-display').innerText = text;
 
-    const progress = Math.min(flashCount * 10, 100);
-    document.getElementById('progress-bar').style.width = progress + '%';
-    document.getElementById('progress-text').innerText = `PAWRRUPTIN ${progress}%`;
+    const progress = Math.min(flashCount * 10, 100);
+    document.getElementById('progress-bar').style.width = progress + '%';
+    document.getElementById('progress-text').innerText = `PAWRRUPTIN ${progress}%`;
 
-    const virus = document.getElementById('virus-window');
-    const gif = document.getElementById('virus-gif');
-    gif.src = popupGifs[Math.floor(Math.random()*popupGifs.length)];
-    
-    const top = 10 + Math.random() * 70;
-    const left = 8 + Math.random() * 74;
-    virus.style.top = `${top}%`;
-    virus.style.left = `${left}%`;
-    virus.style.transform = `rotate(${Math.random()*38 - 19}deg)`;
-    virus.style.display = 'block';
+    const virus = document.getElementById('virus-window');
+    const gif = document.getElementById('virus-gif');
+    gif.src = popupGifs[Math.floor(Math.random()*popupGifs.length)];
+    
+    const top = 10 + Math.random() * 70;
+    const left = 8 + Math.random() * 74;
+    virus.style.top = `${top}%`;
+    virus.style.left = `${left}%`;
+    virus.style.transform = `rotate(${Math.random()*38 - 19}deg)`;
+    virus.style.display = 'block';
 
-    const cursor = document.createElement('div');
-    cursor.className = 'fake-cursor';
-    cursor.style.top = `${top + 15}%`;
-    cursor.style.left = `${left + 12}%`;
-    cursor.style.opacity = '1';
-    document.getElementById('container').appendChild(cursor);
+    const cursor = document.createElement('div');
+    cursor.className = 'fake-cursor';
+    cursor.style.top = `${top + 15}%`;
+    cursor.style.left = `${left + 12}%`;
+    cursor.style.opacity = '1';
+    document.getElementById('container').appendChild(cursor);
 
-    setTimeout(() => { cursor.style.opacity = '0'; setTimeout(() => cursor.remove(), 800); }, 550);
+    setTimeout(() => { cursor.style.opacity = '0'; setTimeout(() => cursor.remove(), 800); }, 550);
 
-    const audio = document.getElementById('audio');
-    audio.volume = Math.min(0.4 + flashCount/10 * 0.6, 1);
-    audio.currentTime = 0;
-    audio.play();
+    const audio = document.getElementById('audio');
+    audio.volume = Math.min(0.4 + flashCount/10 * 0.6, 1);
+    audio.currentTime = 0;
+    audio.play();
 
-    if (flashCount === 10) {
-        setTimeout(() => window.location.href = "https://throne.com/cannibalprncss", 3800);
-    }
+    if (flashCount === 10) {
+        setTimeout(() => window.location.href = "https://throne.com/cannibalprncss", 3800);
+    }
 
-    setTimeout(() => virus.style.display = 'none', 2100);
+    setTimeout(() => virus.style.display = 'none', 2100);
 }
 
 window.onload = () => {
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => { if (e.key === "Escape") { alert("NO ESCAPE."); e.preventDefault(); }});
-    history.pushState(null, null, location.href);
-    window.onpopstate = () => history.pushState(null, null, location.href);
-    setTimeout(showIntroVideos, 400);
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => { if (e.key === "Escape") { alert("NO ESCAPE."); e.preventDefault(); }});
+    history.pushState(null, null, location.href);
+    window.onpopstate = () => history.pushState(null, null, location.href);
+    setTimeout(showIntroVideos, 400);
 };
 </script>
 </body>

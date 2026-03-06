@@ -22,10 +22,7 @@
 
         #state-display { position:absolute; top:40px; font-size:3.1em; color:#00ffff; background:#000; padding:28px 85px; border:12px dashed #00ffff; box-shadow:0 0 90px #00ffff; display:none; z-index:20; }
 
-        #tribute-float { 
-            position:absolute; top:35px; right:35px; font-size:1.8em; padding:14px 38px; background:#000; color:#ffff00; 
-            border:8px solid #ffff00; box-shadow:0 0 50px #ffff00; cursor:pointer; z-index:50; 
-        }
+        #tribute-float { position:absolute; top:35px; right:35px; font-size:1.8em; padding:14px 38px; background:#000; color:#ffff00; border:8px solid #ffff00; box-shadow:0 0 50px #ffff00; cursor:pointer; z-index:50; }
 
         #progress-container {
             position:absolute; bottom:80px; width:70%; background:#000; border:8px solid #ff00ff; box-shadow:0 0 60px #ff00ff; padding:12px; z-index:30;
@@ -40,8 +37,7 @@
         .virus-content { padding:10px; }
 
         .fake-cursor {
-            position:absolute; width:42px; height:42px; background:url('https://files.catbox.moe/070iyo.mov') no-repeat center/contain; 
-            z-index:60; pointer-events:none; opacity:0; transition:all 0.6s;
+            position:absolute; width:36px; height:36px; background:url('https://files.catbox.moe/070iyo.mov') no-repeat center/contain; z-index:60; pointer-events:none; opacity:0;
         }
     </style>
 </head>
@@ -69,7 +65,7 @@
             <div class="virus-content"><img id="virus-gif" src="" style="width:100%;"></div>
         </div>
 
-        <div id="pulse-display" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:3.1em; text-align:center; max-width:80%; z-index:25; display:none;"></div>
+        <div id="pulse-display" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:3.1em; text-align:center; max-width:80%; color:#ff00ff; z-index:25;"></div>
     </div>
 
     <audio id="audio" src="https://files.catbox.moe/of5w5z.mp3" preload="auto"></audio>
@@ -77,7 +73,6 @@
     <script>
         let flashCount = 0;
         let currentState = "";
-        const amounts = [11.11,22.22,33.33,44.44,55.55,66.66,77.77,88.88,99.99,111.11];
         const popupGifs = ["https://files.catbox.moe/14gid0.gif","https://files.catbox.moe/gvjp5u.gif","https://files.catbox.moe/dh1yx0.gif","https://files.catbox.moe/75805g.gif","https://files.catbox.moe/axti3y.gif","https://files.catbox.moe/09hw7w.gif","https://files.catbox.moe/cfkgp5.gif"];
 
         const threats = [
@@ -154,7 +149,6 @@
 
         function pulseFlash() {
             flashCount++;
-            const amount = amounts[flashCount-1];
             const text = threats[flashCount-1].replace("{STATE}", currentState || "");
 
             document.getElementById('pulse-display').innerHTML = text;
@@ -196,25 +190,10 @@
             audio.play();
 
             if (flashCount === 10) {
-                // Final fake cursor click on Throne button
-                const finalCursor = document.createElement('div');
-                finalCursor.className = 'fake-cursor';
-                finalCursor.style.top = '48px';
-                finalCursor.style.left = 'calc(100% - 120px)';
-                finalCursor.style.opacity = '1';
-                document.getElementById('container').appendChild(finalCursor);
-
-                setTimeout(() => {
-                    finalCursor.style.transform = 'scale(0.6)';
-                    setTimeout(() => window.location.href = "https://throne.com/cannibalprncss", 400);
-                }, 600);
+                setTimeout(() => window.location.href = "https://throne.com/cannibalprncss", 3800);
             }
 
             setTimeout(() => virus.style.display = 'none', 2100);
-        }
-
-        function sendToThrone() {
-            window.open("https://throne.com/cannibalprncss", '_blank');
         }
 
         window.onload = () => {

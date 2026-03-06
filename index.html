@@ -6,24 +6,28 @@
     <title>CANNIBAL FUR PRINCESS</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        body { margin:0; padding:0; overflow:hidden; background:#000 url('https://files.catbox.moe/k30zqp.gif') center/cover; image-rendering:pixelated; cursor:none; font-family:'Press Start 2P',system-ui; color:#ff00ff; }
+        body { margin:0; padding:0; overflow:hidden; background:#000 url('https://files.catbox.moe/k30zqp.gif') center/cover fixed; image-rendering:pixelated; cursor:none; font-family:'Press Start 2P',system-ui; color:#ff00ff; }
         #container { position:relative; width:100vw; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; background:rgba(0,0,0,0.75); }
-        .scanlines { position:absolute; inset:0; background:repeating-linear-gradient(to bottom,rgba(255,0,255,0.22) 0px,transparent 2px,transparent 4px); z-index:5; animation:scan 0.05s linear infinite; }
-        @keyframes scan { 0%{background-position:0 0} 100%{background-position:0 600px} }
+        .scanlines { position:absolute; inset:0; background:repeating-linear-gradient(to bottom,rgba(255,0,255,0.3) 0px,transparent 1px,transparent 3px); z-index:5; animation:scan 0.025s linear infinite; }
+        @keyframes scan { 0%{background-position:0 0} 100%{background-position:0 900px} }
 
-        #slide { max-width:520px; border:8px solid #ff00ff; box-shadow:0 0 100px #ff00ff,0 0 50px #00ffff; image-rendering:pixelated; display:none; }
+        #slide { max-width:520px; border:8px solid #ff00ff; box-shadow:0 0 130px #ff00ff,0 0 80px #00ffff; image-rendering:pixelated; display:none; }
 
-        #pulse-display { font-size:2.9em; line-height:1.2; min-height:260px; max-width:90%; padding:35px; background:rgba(30,0,50,0.95); border:12px solid #ff00ff; box-shadow:0 0 110px #ff00ff; margin:20px 0; text-shadow:0 0 40px #00ffff; color:#ff00ff; }
-        #city-state { font-size:2.6em; color:#00ffff; background:#000; padding:25px 60px; border:8px dashed #00ffff; margin:15px 0; box-shadow:0 0 70px #00ffff; text-transform:uppercase; }
-        #threat-level { font-size:2.1em; color:#00ff00; text-shadow:0 0 35px #00ff00; }
+        #pulse-display { font-size:3.2em; line-height:1.1; min-height:320px; max-width:90%; padding:50px; background:rgba(20,0,60,0.97); border:18px solid #ff00ff; box-shadow:0 0 160px #ff00ff; margin:35px 0; text-shadow:0 0 55px #00ffff; color:#ff00ff; }
+        #city-state { font-size:3.1em; color:#00ffff; background:#000; padding:45px 100px; border:16px dashed #00ffff; margin:35px 0; box-shadow:0 0 110px #00ffff; text-transform:uppercase; font-weight:bold; }
+        #threat-level { font-size:2.5em; color:#00ff00; text-shadow:0 0 55px #00ff00; }
 
-        #tribute-float { position:absolute; top:20px; right:20px; font-size:1.8em; padding:14px 35px; background:#000; color:#ffff00; border:8px solid #ffff00; box-shadow:0 0 50px #ffff00; cursor:pointer; z-index:30; }
+        #tribute-float { position:absolute; top:30px; right:30px; font-size:2.3em; padding:22px 55px; background:#000; color:#ffff00; border:14px solid #ffff00; box-shadow:0 0 90px #ffff00; cursor:pointer; z-index:50; }
 
-        .flash { animation:flashPulse 0.32s infinite !important; }
-        @keyframes flashPulse { 0%,100%{opacity:0.2;transform:scale(0.78)rotate(-6deg)} 50%{opacity:1;transform:scale(1.28)rotate(6deg)} }
+        .flash { animation:flashPulse 0.22s infinite !important; }
+        @keyframes flashPulse { 0%,100%{opacity:0.05;transform:scale(0.6)rotate(-12deg)} 50%{opacity:1;transform:scale(1.45)rotate(12deg)} }
 
-        .overlay { position:absolute; inset:0; background:#ff00ff; opacity:0; mix-blend-mode:screen; z-index:10; transition:opacity 0.4s; }
-        .popup-gif { position:absolute; bottom:40px; max-width:420px; border:10px solid #00ffff; box-shadow:0 0 100px #ff00ff; image-rendering:pixelated; display:none; z-index:20; }
+        .virus-window {
+            position:absolute; width:500px; background:#000; border:16px solid #ff00ff; box-shadow:0 0 200px #ff00ff; z-index:40; display:none; image-rendering:pixelated;
+            top:50%; left:50%; transform:translate(-50%,-50%) rotate(0deg); transition:all 0.5s;
+        }
+        .virus-titlebar { background:#ff00ff; color:#000; padding:12px; font-size:1.5em; text-align:left; border-bottom:10px solid #00ffff; }
+        .virus-content { padding:15px; }
     </style>
 </head>
 <body>
@@ -36,54 +40,34 @@
         <div id="pulse-display"></div>
         <div id="city-state"></div>
         <div id="threat-level"></div>
-        <button id="tribute-btn" onclick="sendToThrone()" style="display:none;font-size:2.7em;padding:28px 80px;background:#000;color:#ffff00;border:12px solid #ffff00;box-shadow:0 0 100px #ffff00;margin-top:35px;"></button>
+        <button id="tribute-btn" onclick="sendToThrone()" style="display:none;font-size:3.1em;padding:40px 110px;background:#000;color:#ffff00;border:18px solid #ffff00;box-shadow:0 0 150px #ffff00;margin-top:55px;"></button>
 
-        <div id="overlay" class="overlay"></div>
-        <img id="popup-gif" class="popup-gif" src="">
+        <div id="virus-window" class="virus-window">
+            <div class="virus-titlebar">VIRUS DETECTED — PREY LOCATED</div>
+            <div class="virus-content"><img id="virus-gif" src="" style="width:100%;"></div>
+        </div>
     </div>
 
-    <audio id="audio" src="https://files.catbox.moe/of5w5z.mp3"></audio>
+    <audio id="audio" src="https://files.catbox.moe/of5w5z.mp3" preload="auto"></audio>
 
     <script>
         let flashCount = 0;
-        let currentCityState = "ACQUIRING PREY...";
-        let pulseInterval;
+        let currentCityState = "";
         const amounts = [11.11,22.22,33.33,44.44,55.55,66.66,77.77,88.88,99.99,111.11];
         const popupGifs = ["https://files.catbox.moe/14gid0.gif","https://files.catbox.moe/gvjp5u.gif","https://files.catbox.moe/dh1yx0.gif","https://files.catbox.moe/75805g.gif","https://files.catbox.moe/axti3y.gif","https://files.catbox.moe/09hw7w.gif","https://files.catbox.moe/cfkgp5.gif"];
 
         const threats = [
-            "Your warm fur is already twitching in {CITY} — my claws can smell it. Wanna stay safe? Send $11.11",
-            "Paws pinned against the wall in {CITY} — your scent is driving me feral. Wanna stay safe? Send $22.22",
-            "I can taste the fear-sweat matting your pelt in {CITY}. Wanna stay safe? Send $33.33",
-            "Edge that throbbing sheath while I imagine ripping through your fur in {CITY}. Wanna stay safe? Send $44.44",
-            "Your denied knot is leaking for my fangs in {CITY} — I want to chew it raw. Wanna stay safe? Send $55.55",
-            "Every desperate hump you make in {CITY} feeds my hunger. Wanna stay safe? Send $66.66",
-            "I’m going to tear your pelt off strip by strip in {CITY} if you don’t pay. Wanna stay safe? Send $77.77",
-            "Your city is marked — I’m coming to sink my teeth into that soft underbelly. Wanna stay safe? Send $88.88",
-            "The whole pack will know where the leaking fur slut lives in {CITY}. Wanna stay safe? Send $99.99",
-            "FINAL FEAST — {CITY} is mine. I will devour every inch of your trembling fur and soul. Wanna stay safe? Send $111.11"
+            "Your fur's scent is filling my lungs in {CITY} — my claws are already out. Wanna stay safe? Send $11.11",
+            "Paws trembling in {CITY} — I can hear your heartbeat from here. Wanna stay safe? Send $22.22",
+            "Your pelt is matted with desperation in {CITY}. Wanna stay safe? Send $33.33",
+            "Edge slow in {CITY} while I imagine sinking fangs into your hide. Wanna stay safe? Send $44.44",
+            "Your ache echoes through {CITY} — I want to taste every drop. Wanna stay safe? Send $55.55",
+            "Every throb you feel in {CITY} belongs to me now. Wanna stay safe? Send $66.66",
+            "I'm going to peel your fur back layer by layer in {CITY} if you don't pay. Wanna stay safe? Send $77.77",
+            "Your location is branded — my teeth are grazing your throat. Wanna stay safe? Send $88.88",
+            "The pack already knows your hiding spot in {CITY}. Wanna stay safe? Send $99.99",
+            "FINAL DEVOUR — {CITY} is where I claim every piece of your soul and fur. Wanna stay safe? Send $111.11"
         ];
-
-        async function getRealCityState(lat, lon) {
-            // Primary: accurate reverse geocode
-            try {
-                const res = await fetch(`https://geocode.maps.co/reverse?lat=${lat}&lon=${lon}`);
-                const data = await res.json();
-                let city = data.address?.city || data.address?.town || data.address?.county || "";
-                let state = data.address?.state || "";
-                if (city && state) return `${city}, ${state}`.trim();
-            } catch(e) {}
-
-            // Fallback: IP-based city (no extra permission needed)
-            try {
-                const ipRes = await fetch('https://ipapi.co/json/');
-                const ipData = await ipRes.json();
-                if (ipData.city && ipData.region) return `${ipData.city}, ${ipData.region}`;
-                if (ipData.city) return ipData.city;
-            } catch(e) {}
-
-            return "YOUR CITY IS MINE";
-        }
 
         function showIntroSlides() {
             const slide = document.getElementById('slide');
@@ -95,37 +79,46 @@
                 if (i < 3) slide.src = slides[i];
                 else {
                     clearInterval(next);
-                    setTimeout(() => {
-                        document.getElementById('slide').style.display = 'none';
-                        document.getElementById('pulse-display').innerHTML = "WAITING FOR YOUR LOCATION...";
-                        requestLocation();
-                    }, 800);
+                    setTimeout(requestLocation, 800);
                 }
             }, 2400);
         }
 
         function requestLocation() {
+            document.getElementById('slide').style.display = 'none';
+            document.getElementById('pulse-display').innerHTML = "ACQUIRING TARGET...";
+
             navigator.geolocation.getCurrentPosition(
                 async (pos) => {
-                    currentCityState = await getRealCityState(pos.coords.latitude, pos.coords.longitude);
-                    document.getElementById('city-state').innerHTML = `LOCATION LOCKED: ${currentCityState}`;
-                    document.getElementById('pulse-display').innerHTML = "PREY ACQUIRED. BEGINNING FEAST...";
-                    setTimeout(startIntensePhases, 1200);
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    try {
+                        const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+                        const data = await res.json();
+                        currentCityState = data.city || data.locality || data.principalSubdivision || "";
+                    } catch(e) {}
+                    
+                    if (currentCityState) {
+                        document.getElementById('city-state').innerHTML = `LOCATION LOCKED: ${currentCityState}`;
+                    }
+                    document.getElementById('pulse-display').innerHTML = "TARGET ACQUIRED. INITIATING DEVOUR PROTOCOL.";
+                    setTimeout(startPhases, 1400);
                 },
-                () => alert("YOU DENIED ME YOUR CITY?\nPathetic prey."),
-                { enableHighAccuracy: true, timeout: 8000 }
+                () => alert("PERMISSION DENIED?\nWeak prey."),
+                { enableHighAccuracy: true, timeout: 15000 }
             );
         }
 
-        function startIntensePhases() {
-            pulseInterval = setInterval(pulseFlash, 23000);
+        function startPhases() {
+            document.getElementById('audio').play().catch(() => {});
+            pulseInterval = setInterval(pulseFlash, 22000);
             pulseFlash();
         }
 
         function pulseFlash() {
             flashCount++;
             const amount = amounts[flashCount-1];
-            let text = threats[flashCount-1].replace("{CITY}", currentCityState);
+            const text = threats[flashCount-1].replace("{CITY}", currentCityState || "");
 
             document.getElementById('pulse-display').innerHTML = text;
             document.getElementById('threat-level').innerHTML = `DEVOUR LEVEL ${flashCount}/10 — FUR RIPPED`;
@@ -136,26 +129,29 @@
 
             const intensity = flashCount / 10;
             document.getElementById('pulse-display').classList.add('flash');
-            document.getElementById('overlay').style.opacity = Math.min(intensity * 0.97, 0.97);
+            document.getElementById('overlay').style.opacity = Math.min(intensity * 0.99, 0.99);
 
-            if (navigator.vibrate) navigator.vibrate([flashCount*100, 140, flashCount*160]);
+            if (navigator.vibrate) navigator.vibrate([flashCount*140, 220, flashCount*240]);
 
-            const gif = document.getElementById('popup-gif');
+            const virus = document.getElementById('virus-window');
+            const gif = document.getElementById('virus-gif');
             gif.src = popupGifs[Math.floor(Math.random()*popupGifs.length)];
-            gif.style.display = 'block';
+            virus.style.transform = `translate(-50%,-50%) rotate(${Math.random()*28 - 14}deg)`;
+            virus.style.display = 'block';
 
             const audio = document.getElementById('audio');
-            audio.volume = Math.min(0.3 + intensity*0.7, 1);
+            audio.volume = Math.min(0.35 + intensity*0.65, 1);
+            audio.currentTime = 0;
             audio.play();
 
             if (flashCount === 10) {
-                setTimeout(() => window.location.href = "https://throne.com/cannibalprncss", 3200);
+                setTimeout(() => window.location.href = "https://throne.com/cannibalprncss", 3800);
             }
 
             setTimeout(() => {
                 document.getElementById('pulse-display').classList.remove('flash');
-                gif.style.display = 'none';
-            }, 1600);
+                virus.style.display = 'none';
+            }, 2100);
         }
 
         function sendToThrone() {

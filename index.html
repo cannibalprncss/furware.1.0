@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CANNIBAL FUR PRINCESS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000 url('https://files.catbox.moe/k30zqp.gif') center/cover;
+            image-rendering: pixelated;
+            cursor: none;
+            font-family: 'Press Start 2P', system-ui;
+            color: #ff00ff;
+        }
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: rgba(0,0,0,0.7);
+        }
+        .scanlines {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(to bottom, rgba(255,0,255,0.18) 0px, transparent 2px, transparent 4px);
+            pointer-events: none;
+            z-index: 5;
+            animation: scan 0.06s linear infinite;
+        }
+        @keyframes scan { 0% { background-position: 0 0; } 100% { background-position: 0 500px; } }
+
+        #slide {
+            max-width: 520px;
+            border: 8px solid #ff00ff;
+            box-shadow: 0 0 90px #ff00ff, 0 0 40px #00ffff;
+            image-rendering: pixelated;
+            display: none;
+        }
+
+        #pulse-display {
+            font-size: 2.8em;
+            line-height: 1.25;
+            min-height: 240px;
+            max-width: 92%;
+            padding: 30px;
+            background: rgba(20,0,40,0.95);
+            border: 10px solid #ff00ff;
+            box-shadow: 0 0 90px #ff00ff;
+            margin: 20px 0;
+            text-shadow: 0 0 30px #00ffff;
+            color: #ff00ff;
+        }
+        #city-state {
+            font-size: 2.3em;
+            color: #00ffff;
+            background: #000;
+            padding: 20px 50px;
+            border: 6px dashed #00ffff;
+            margin: 15px 0;
+            box-shadow: 0 0 50px #00ffff;
+        }
+        #threat-level {
+            font-size: 1.9em;
+            color: #00ff00;
+            text-shadow: 0 0 25px #00ff00;
+        }
+        #tribute-btn {
+            font-size: 2.5em;
+            padding: 26px 70px;
+            background: #000;
+            color: #ffff00;
+            border: 10px solid #ffff00;
+            box-shadow: 0 0 80px #ffff00;
+            cursor: pointer;
+            margin-top: 35px;
+            display: none;
+        }
+
+        .flash {
+            animation: flashPulse 0.38s infinite !important;
+        }
+        @keyframes flashPulse {
+            0%,100% { opacity: 0.3; transform: scale(0.82) rotate(-4deg); }
+            50% { opacity: 1; transform: scale(1.22) rotate(4deg); }
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: #ff00ff;
+            opacity: 0;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 10;
+            transition: opacity 0.45s;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="scanlines"></div>
+
+        <img id="slide" src="https://files.catbox.moe/6sqmgs.gif">
+
+        <div id="pulse-display"></div>
+        <div id="city-state"></div>
+        <div id="threat-level"></div>
+        <button id="tribute-btn" onclick="sendToThrone()"></button>
+
+        <div id="overlay" class="overlay"></div>
+    </div>
+
+    <audio id="audio" src="https://files.catbox.moe/of5w5z.mp3"></audio>
+
+    <script>
+        let flashCount = 0;
+        let currentCityState = "";
+        let pulseInterval;
+        const amounts = [11.11,22.22,33.33,44.44,55.55,66.66,77.77,88.88,99.99,111.11];
+        const throneLink = "https://throne.com/cannibalprncss";
+
+        const threats = [
+            "Your warm fur is already twitching in {CITY} — my claws can smell it. Wanna stay safe? Send $11.11",
+            "Paws pinned against the wall in {CITY} — your scent is driving me feral. Wanna stay safe? Send $22.22",
+            "I can taste the fear-sweat matting your pelt in {CITY}. Wanna stay safe? Send $33.33",
+            "Edge that throbbing sheath while I imagine ripping through your fur in {CITY}. Wanna stay safe? Send $44.44",
+            "Your denied knot is leaking for my fangs in {CITY} — I want to chew it raw. Wanna stay safe? Send $55.55",
+            "Every desperate hump you make in {CITY} feeds my hunger. Wanna stay safe? Send $66.66",
+            "I’m going to tear your pelt off strip by strip in {CITY} if you don’t pay. Wanna stay safe? Send $77.77",
+            "Your city is marked — I’m coming to sink my teeth into that soft underbelly. Wanna stay safe? Send $88.88",
+            "The whole pack will know where the leaking fur slut lives in {CITY}. Wanna stay safe? Send $99.99",
+            "FINAL FEAST — {CITY} is mine. I will devour every inch of your trembling fur and soul. Wanna stay safe? Send $111.11"
+        ];
+
+        async function getCityState(lat, lon) {
+            try {
+                const res = await fetch(`https://geocode.maps.co/reverse?lat=${lat}&lon=${lon}`);
+                const data = await res.json();
+                const city = data.address?.city || data.address?.town || "Unknown Den";
+                const state = data.address?.state || "";
+                return `${city}, ${state}`.trim();
+            } catch(e) {
+                return "HIDDEN IN MY JAWS";
+            }
+        }
+
+        function showIntroSlides() {
+            const slide = document.getElementById('slide');
+            const slides = [
+                "https://files.catbox.moe/6sqmgs.gif",
+                "https://files.catbox.moe/23unwn.gif",
+                "https://files.catbox.moe/a4scgo.gif"
+            ];
+            let i = 0;
+            slide.style.display = 'block';
+
+            const next = setInterval(() => {
+                i++;
+                if (i < 3) slide.src = slides[i];
+                else {
+                    clearInterval(next);
+                    setTimeout(startFlashingPhases, 1600);
+                }
+            }, 2400);
+        }
+
+        async function startFlashingPhases() {
+            document.getElementById('slide').style.display = 'none';
+            document.getElementById('pulse-display').innerHTML = "TRACKING YOUR SCENT...";
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                currentCityState = await getCityState(pos.coords.latitude, pos.coords.longitude);
+                pulseInterval = setInterval(pulseFlash, 26000);
+                pulseFlash();
+            }, () => alert("YOU DENIED ME YOUR CITY?\nPathetic prey."), { enableHighAccuracy: true });
+        }
+
+        function pulseFlash() {
+            flashCount++;
+            const amount = amounts[flashCount-1];
+            const text = threats[flashCount-1].replace("{CITY}", currentCityState);
+
+            document.getElementById('pulse-display').innerHTML = text;
+            document.getElementById('city-state').innerHTML = `LOCATION LOCKED: ${currentCityState}`;
+            document.getElementById('threat-level').innerHTML = `DEVOUR LEVEL ${flashCount}/10 — FUR RIPPED`;
+            const btn = document.getElementById('tribute-btn');
+            btn.innerHTML = `SEND $${amount.toFixed(2)} ON THRONE`;
+            btn.style.display = 'block';
+
+            const intensity = flashCount / 10;
+            document.getElementById('pulse-display').classList.add('flash');
+            document.getElementById('overlay').style.opacity = Math.min(intensity * 0.94, 0.94);
+
+            if (navigator.vibrate) navigator.vibrate([flashCount*75, 100, flashCount*120]);
+
+            if (flashCount === 10) {
+                document.getElementById('audio').play();
+                setTimeout(() => window.location.href = throneLink, 2600);
+            }
+
+            setTimeout(() => document.getElementById('pulse-display').classList.remove('flash'), 700);
+        }
+
+        function sendToThrone() {
+            window.open(throneLink, '_blank');
+            clearInterval(pulseInterval);
+            document.getElementById('tribute-btn').innerHTML = "RELOAD TO BE HUNTED AGAIN";
+        }
+
+        window.onload = () => {
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if (e.key === "Escape") { alert("NO ESCAPE FROM MY FANGS."); e.preventDefault(); }
+            });
+            history.pushState(null, null, location.href);
+            window.onpopstate = () => history.pushState(null, null, location.href);
+
+            setTimeout(showIntroSlides, 500);
+        };
+    </script>
+</body>
+</html>

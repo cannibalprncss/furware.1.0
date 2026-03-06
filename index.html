@@ -6,201 +6,207 @@
 <title>CANNIBAL FUR PRINCESS</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 body {
     margin:0; padding:0; overflow:hidden;
     background:#000 url('https://files.catbox.moe/k30zqp.gif') center/cover fixed;
-    image-rendering:pixelated; cursor:none;
-    font-family:'Press Start 2P',system-ui; color:#ff00ff;
+    image-rendering:pixelated;
+    font-family:'Press Start 2P', system-ui;
+    color:#ff00ff;
 }
 
 #container { position:relative; width:100vw; height:100vh; }
 
 .scanlines {
     position:absolute; inset:0;
-    background:repeating-linear-gradient(to bottom,rgba(255,0,255,0.2) 0px,transparent 1px,transparent 4px);
-    z-index:5; animation:scan 0.02s linear infinite;
+    background:repeating-linear-gradient(to bottom, rgba(255,0,255,0.35) 0px, transparent 1px, transparent 3px);
+    z-index:5;
+    animation:scan 0.02s linear infinite;
 }
 @keyframes scan { 0%{background-position:0 0} 100%{background-position:0 1200px} }
 
 #video {
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    max-width:96vw; max-height:96vh; border:4px solid #ff00ff;
-    box-shadow:0 0 100px #ff00ff, 0 0 20px #00ffff inset; display:none; z-index:10;
+    max-width:96vw; max-height:96vh; border:8px solid #ff00ff;
+    box-shadow:0 0 160px #ff00ff;
+    z-index:10;
+    opacity:0;
+    transition: opacity 0.8s ease-in-out;
 }
 
-#start-paw {
+#start-btn {
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    z-index:50; text-align:center; cursor:pointer; display:block;
-    animation:glowPulse 1s infinite alternate;
-}
-#start-paw img {
-    width:400px; filter:drop-shadow(0 0 60px #ff00ff) drop-shadow(0 0 40px #00ffff);
-}
-#start-text {
-    font-size:3em; color:#ff69b4; text-shadow:2px 2px #00ffff, -2px -2px #ff00ff;
-    margin-top:15px;
-    animation:textFlicker 0.15s infinite alternate;
-}
-
-@keyframes glowPulse {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.03); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-}
-@keyframes textFlicker {
-    0% { opacity:1; text-shadow:2px 2px #00ffff, -2px -2px #ff00ff; }
-    50% { opacity:0.8; text-shadow:4px 0 #ff00ff, -2px 3px #00ffff; }
-    100% { opacity:1; text-shadow:2px 2px #00ffff, -2px -2px #ff00ff; }
-}
-
-#state-display {
-    position:absolute; top:40px; left:50%; transform:translateX(-50%);
-    font-size:2.5em; color:#00ffff; background:rgba(0,0,0,0.6);
-    padding:12px 36px; border:3px dashed #00ffff;
-    box-shadow:0 0 40px #00ffff; display:none; z-index:20;
-    text-shadow:1px 1px #ff00ff;
-}
-
-#tribute-float {
-    position:absolute; top:20px; right:20px;
-    font-size:1.2em; padding:6px 14px; background:rgba(0,0,0,0.6); color:#ff00ff;
-    border:2px solid #ff00ff; box-shadow:0 0 20px #00ffff; cursor:pointer; z-index:50;
-    text-transform:uppercase;
+    z-index:50; text-align:center; cursor:pointer;
+    padding:20px 40px; font-size:2.5em; color:#ffff00;
+    background:rgba(0,0,0,0.7); border:6px solid #ff00ff;
+    box-shadow:0 0 60px #ff00ff; display:none;
 }
 
 #progress-container {
-    position:absolute; bottom:50px; left:50%; transform:translateX(-50%);
-    width:70%; background:rgba(0,0,0,0.5); border:2px solid #ff00ff;
-    box-shadow:0 0 30px #ff00ff; padding:6px; z-index:30;
+    position:absolute; bottom:60px; left:50%; transform:translateX(-50%);
+    width:70%; background:#000; border:4px solid #ff00ff; box-shadow:0 0 40px #ff00ff;
+    padding:8px; z-index:20;
 }
-#progress-bar {
-    height:20px; background:linear-gradient(90deg,#ff00ff,#00ffff);
-    width:0%; transition:width 0.5s linear; box-shadow:0 0 15px #ff00ff;
+#progress-bar { height:24px; background:linear-gradient(90deg,#ff00ff,#00ffff); width:0%; transition:width 0.8s linear; }
+#progress-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-size:1.4em; color:#000; text-shadow:0 0 6px #ffff00; font-weight:bold;
 }
-#progress-text {
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    font-size:1.2em; color:#000; text-shadow:0 0 4px #ffff00; font-weight:bold; z-index:31;
+
+.pulse-text {
+    position:absolute; top:40%; left:50%; transform:translate(-50%,-50%);
+    font-size:2.8em; text-align:center; max-width:80%; color:#ff00ff; z-index:25; display:none;
 }
 
 .virus-window {
-    position:absolute; width:350px; background:rgba(0,0,0,0.6); border:3px solid #ff00ff;
-    box-shadow:0 0 120px #ff00ff; z-index:40; display:none; image-rendering:pixelated;
+    position:absolute; width:360px; background:#000; border:8px solid #ff00ff;
+    box-shadow:0 0 150px #ff00ff; z-index:30; display:none; image-rendering:pixelated;
 }
-.virus-titlebar {
-    background:#ff00ff; color:#000; padding:4px; font-size:1em; text-align:left;
-    border-bottom:2px solid #00ffff;
-}
-.virus-content { padding:4px; }
+.virus-content img { width:100%; }
 
-.fake-cursor {
-    position:absolute; width:36px; height:36px; background:url('https://files.catbox.moe/070iyo.mov') no-repeat center/contain;
-    z-index:60; pointer-events:none; opacity:0;
-}
-
-#pulse-display {
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    font-size:2em; text-align:center; max-width:80%; color:#ff00ff; z-index:25; display:none;
-    text-shadow:2px 2px #00ffff, -2px -2px #ff00ff;
+#throne-link {
+    position:absolute; top:30px; right:30px; font-size:1.8em; padding:6px 12px;
+    background:rgba(0,0,0,0.7); color:#ffff00; border:3px solid #ff00ff;
+    box-shadow:0 0 30px #ff00ff; z-index:50; text-decoration:none;
 }
 </style>
 </head>
 <body>
 <div id="container">
     <div class="scanlines"></div>
-    <div id="tribute-float" onclick="window.open('https://throne.com/cannibalprncss','_blank')">THRONE</div>
-
     <video id="video" autoplay playsinline muted></video>
 
-    <div id="start-paw" onclick="startHunt()">
-        <img src="https://files.catbox.moe/070iyo.mov">
-        <div id="start-text">YOU wanted this</div>
-    </div>
+    <div id="start-btn">YOU WANTED THIS</div>
 
-    <div id="state-display"></div>
+    <div id="pulse" class="pulse-text"></div>
 
     <div id="progress-container">
         <div id="progress-bar"></div>
         <div id="progress-text">PAWRRUPTION 0%</div>
     </div>
 
-    <div id="virus-window" class="virus-window">
-        <div class="virus-titlebar">VIRUS DETECTED — PREY SPOTTED</div>
-        <div class="virus-content"><img id="virus-gif" src="" style="width:100%;"></div>
-    </div>
+    <a href="https://throne.com/cannibalprncss" target="_blank" id="throne-link">THRONE</a>
 
-    <div id="pulse-display"></div>
+    <div class="virus-window" id="virus">
+        <div class="virus-content">
+            <img id="virus-gif" src="">
+        </div>
+    </div>
 </div>
 
 <audio id="audio" src="https://files.catbox.moe/of5w5z.mp3" preload="auto"></audio>
 
 <script>
-let flashCount=0; let currentState=""; 
-const popupGifs=[
-"https://files.catbox.moe/14gid0.gif",
-"https://files.catbox.moe/gvjp5u.gif",
-"https://files.catbox.moe/dh1yx0.gif",
-"https://files.catbox.moe/75805g.gif",
-"https://files.catbox.moe/axti3y.gif",
-"https://files.catbox.moe/09hw7w.gif",
-"https://files.catbox.moe/cfkgp5.gif"
+const videos = [
+    "https://files.catbox.moe/070iyo.mov",
+    "https://files.catbox.moe/rtw280.mp4",
+    "https://files.catbox.moe/ykncjz.mp4"
 ];
-const threats=[
-"i know exactly where you are in {STATE}… and i’m coming for you 😏",
-"ohhh, {STATE} looks fun tonight… can you feel me watching?",
-"don’t even think about hiding in {STATE}… i’ll find you",
-"every little move you make in {STATE} makes me want to play…",
-"guess who’s thinking about {STATE}? yep, ME… and it’s all about you",
-"i see you leaking in {STATE}… naughty little thing",
-"don’t get too comfortable in {STATE}… i’ll be there any second",
-"{STATE} has no idea what’s coming… but YOU do, don’t you?",
-"you smell so sweet in {STATE}… i might just ruin you",
-"FINAL WARNING — pack your stuff, {STATE}… i’m coming to have my fun"
+const popups = [
+    "https://files.catbox.moe/14gid0.gif","https://files.catbox.moe/gvjp5u.gif",
+    "https://files.catbox.moe/dh1yx0.gif","https://files.catbox.moe/75805g.gif",
+    "https://files.catbox.moe/axti3y.gif","https://files.catbox.moe/09hw7w.gif",
+    "https://files.catbox.moe/cfkgp5.gif"
 ];
-const videos=[
-"https://files.catbox.moe/070iyo.mov",
-"https://files.catbox.moe/rtw280.mp4",
-"https://files.catbox.moe/ykncjz.mp4"
+const threats = [
+    "I know you’re dripping in {STATE}… Wanna get caught?",
+    "I might pop over to {STATE} soon… better behave",
+    "Thinking about finding you in {STATE}… stay ready",
+    "You’re marked in {STATE}… can’t wait to play",
+    "I see your scent in {STATE}… gonna make it fun",
+    "You better hide in {STATE}… or I’ll find you",
+    "Every corner of {STATE} is mine to track…"
 ];
 
-function showIntroVideos(){
-    const video=document.getElementById('video'); let i=0;
-    video.src=videos[0]; video.style.display='block'; video.play();
-    video.onended=()=>{ i++; if(i<videos.length){ video.src=videos[i]; video.play(); } else { video.style.display='none'; document.getElementById('start-paw').style.display='block'; } };
+let flashCount = 0;
+let currentState = "";
+let videoIndex = 0;
+
+const videoEl = document.getElementById('video');
+const startBtn = document.getElementById('start-btn');
+const audioEl = document.getElementById('audio');
+const pulse = document.getElementById('pulse');
+const progressBar = document.getElementById('progress-bar');
+const progressText = document.getElementById('progress-text');
+const virus = document.getElementById('virus');
+const virusImg = document.getElementById('virus-gif');
+
+// Fade function
+function fadeVideo(nextSrc){
+    videoEl.style.opacity = 0;
+    setTimeout(()=>{
+        videoEl.src = nextSrc;
+        videoEl.play();
+        videoEl.style.opacity = 1;
+    }, 700);
 }
 
-function startHunt(){ document.getElementById('start-paw').style.display='none'; getLocation(); }
+videoEl.addEventListener('ended', ()=>{
+    videoIndex++;
+    if(videoIndex < videos.length){
+        fadeVideo(videos[videoIndex]);
+    } else {
+        startBtn.style.display = 'block';
+    }
+});
+
+startBtn.addEventListener('click', ()=>{
+    startBtn.style.display = 'none';
+    audioEl.play();
+    getLocation();
+});
 
 function getLocation(){
-    navigator.geolocation.getCurrentPosition(
-        (pos)=>{ currentState="your area"; document.getElementById('state-display').innerHTML=`LOCATION LOCKED: ${currentState}`; document.getElementById('state-display').style.display='block'; startPhases(); },
-        ()=>alert("PERMISSION DENIED?\nWeak prey."), { enableHighAccuracy:true, timeout:15000 }
-    );
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+            pos=>{
+                currentState = pos.coords.latitude && pos.coords.longitude ? "Your Area" : "";
+                startPhases();
+            },
+            err=>{
+                currentState = "Your Area";
+                startPhases();
+            }
+        );
+    } else {
+        currentState = "Your Area";
+        startPhases();
+    }
 }
 
 function startPhases(){
-    const audio=document.getElementById('audio'); audio.volume=0.5; audio.play().catch(()=>{});
-    document.getElementById('pulse-display').style.display='block'; setInterval(pulseFlash,19000); pulseFlash();
+    pulse.style.display = 'block';
+    setInterval(flashPhase, 19000);
+    flashPhase();
 }
 
-function pulseFlash(){
-    flashCount++; const text=threats[flashCount-1].replace("{STATE}",currentState);
-    document.getElementById('pulse-display').innerHTML=text;
-    const progress=Math.min(flashCount*10,100); document.getElementById('progress-bar').style.width=progress+'%'; document.getElementById('progress-text').innerHTML=`PAWRRUPTION ${progress}%`;
-    const virus=document.getElementById('virus-window'); const gif=document.getElementById('virus-gif'); gif.src=popupGifs[Math.floor(Math.random()*popupGifs.length)];
-    const top=10+Math.random()*70; const left=8+Math.random()*74; virus.style.top=`${top}%`; virus.style.left=`${left}%`; virus.style.transform=`rotate(${Math.random()*38-19}deg)`; virus.style.display='block';
-    const cursor=document.createElement('div'); cursor.className='fake-cursor'; cursor.style.top=`${top+15}%`; cursor.style.left=`${left+12}%`; cursor.style.opacity='1'; document.getElementById('container').appendChild(cursor);
-    setTimeout(()=>{cursor.style.opacity='0'; setTimeout(()=>cursor.remove(),800)},550);
-    const audio=document.getElementById('audio'); audio.currentTime=0; audio.volume=Math.min(0.5+flashCount/10*0.5,1); audio.play().catch(()=>{});
-    if(flashCount===10) setTimeout(()=>window.location.href='https://throne.com/cannibalprncss',3800);
-    setTimeout(()=>virus.style.display='none',2100);
+function flashPhase(){
+    flashCount++;
+    pulse.innerHTML = threats[flashCount % threats.length].replace("{STATE}", currentState);
+
+    let prog = Math.min(flashCount * 10,100);
+    progressBar.style.width = prog + '%';
+    progressText.innerHTML = `PAWRRUPTION ${prog}%`;
+
+    // random popup
+    let gif = popups[Math.floor(Math.random()*popups.length)];
+    virusImg.src = gif;
+    virus.style.top = 10 + Math.random()*70 + "%";
+    virus.style.left = 8 + Math.random()*74 + "%";
+    virus.style.display = "block";
+
+    setTimeout(()=> virus.style.display="none", 2000);
+
+    audioEl.currentTime = 0;
+    audioEl.volume = Math.min(0.5 + flashCount/10,1);
+    audioEl.play();
+
+    if(flashCount===10){
+        setTimeout(()=> window.location.href="https://throne.com/cannibalprncss",3800);
+    }
 }
 
-window.onload=()=>{
-    document.addEventListener('contextmenu',e=>e.preventDefault());
-    document.addEventListener('keydown',e=>{if(e.key==="Escape"){alert("NO ESCAPE FROM MY FANGS."); e.preventDefault();}});
-    history.pushState(null,null,location.href); window.onpopstate=()=>history.pushState(null,null,location.href);
-    showIntroVideos();
+window.onload = ()=>{
+    videoEl.src = videos[0];
+    videoEl.style.opacity = 1;
 };
 </script>
 </body>

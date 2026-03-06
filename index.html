@@ -3,193 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cannibal Fur Princess</title>
+<title>CANNIBAL FUR PRINCESS</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
-    margin:0; padding:0; overflow:hidden; 
+    margin:0; padding:0; overflow:hidden;
     background:#000 url('https://files.catbox.moe/k30zqp.gif') center/cover fixed;
-    font-family:'Press Start 2P', system-ui; color:#ff00ff; cursor:none; image-rendering:pixelated;
+    image-rendering:pixelated; cursor:none;
+    font-family:'Press Start 2P',system-ui; color:#ff00ff;
 }
+
 #container { position:relative; width:100vw; height:100vh; }
 
-video#intro-video {
+.scanlines {
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(to bottom,rgba(255,0,255,0.2) 0px,transparent 1px,transparent 4px);
+    z-index:5; animation:scan 0.02s linear infinite;
+}
+@keyframes scan { 0%{background-position:0 0} 100%{background-position:0 1200px} }
+
+#video {
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    max-width:96vw; max-height:96vh; z-index:10; border:0; background:#000;
+    max-width:96vw; max-height:96vh; border:4px solid #ff00ff;
+    box-shadow:0 0 100px #ff00ff, 0 0 20px #00ffff inset; display:none; z-index:10;
 }
 
 #start-paw {
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    display:none; cursor:pointer; z-index:50; text-align:center;
+    z-index:50; text-align:center; cursor:pointer; display:block;
+    animation:glowPulse 1s infinite alternate;
 }
-#start-paw img { width:300px; filter:drop-shadow(0 0 40px #ff00ff); }
-#start-paw span { display:block; font-size:2em; color:#00ffff; text-shadow:0 0 20px #00ffff,0 0 40px #ff00ff; margin-top:10px; }
+#start-paw img {
+    width:400px; filter:drop-shadow(0 0 60px #ff00ff) drop-shadow(0 0 40px #00ffff);
+}
+#start-text {
+    font-size:3em; color:#ff69b4; text-shadow:2px 2px #00ffff, -2px -2px #ff00ff;
+    margin-top:15px;
+    animation:textFlicker 0.15s infinite alternate;
+}
+
+@keyframes glowPulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.03); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes textFlicker {
+    0% { opacity:1; text-shadow:2px 2px #00ffff, -2px -2px #ff00ff; }
+    50% { opacity:0.8; text-shadow:4px 0 #ff00ff, -2px 3px #00ffff; }
+    100% { opacity:1; text-shadow:2px 2px #00ffff, -2px -2px #ff00ff; }
+}
 
 #state-display {
     position:absolute; top:40px; left:50%; transform:translateX(-50%);
-    font-size:2em; color:#00ffff; background:#000; padding:20px 40px;
-    border:4px dashed #ff00ff; box-shadow:0 0 40px #ff00ff,0 0 60px #00ffff;
-    text-align:center; display:none; z-index:20;
+    font-size:2.5em; color:#00ffff; background:rgba(0,0,0,0.6);
+    padding:12px 36px; border:3px dashed #00ffff;
+    box-shadow:0 0 40px #00ffff; display:none; z-index:20;
+    text-shadow:1px 1px #ff00ff;
 }
 
-#tribute-link {
-    position:absolute; top:20px; right:20px; font-size:1.2em; color:#ffff00;
-    cursor:pointer; text-decoration:none; z-index:50;
+#tribute-float {
+    position:absolute; top:20px; right:20px;
+    font-size:1.2em; padding:6px 14px; background:rgba(0,0,0,0.6); color:#ff00ff;
+    border:2px solid #ff00ff; box-shadow:0 0 20px #00ffff; cursor:pointer; z-index:50;
+    text-transform:uppercase;
 }
 
 #progress-container {
     position:absolute; bottom:50px; left:50%; transform:translateX(-50%);
-    width:60%; height:30px; background:#000; border:4px solid #ff00ff;
-    box-shadow:0 0 40px #ff00ff; display:none;
+    width:70%; background:rgba(0,0,0,0.5); border:2px solid #ff00ff;
+    box-shadow:0 0 30px #ff00ff; padding:6px; z-index:30;
 }
 #progress-bar {
-    width:0%; height:100%; background: linear-gradient(90deg,#ff00ff,#00ffff);
-    box-shadow:0 0 25px #ff00ff; transition:width 0.8s linear;
+    height:20px; background:linear-gradient(90deg,#ff00ff,#00ffff);
+    width:0%; transition:width 0.5s linear; box-shadow:0 0 15px #ff00ff;
 }
 #progress-text {
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    color:#000; font-size:1em; font-weight:bold; z-index:31;
-    text-shadow:0 0 8px #ffff00;
+    font-size:1.2em; color:#000; text-shadow:0 0 4px #ffff00; font-weight:bold; z-index:31;
 }
 
 .virus-window {
-    position:absolute; width:250px; border:4px solid #ff00ff;
-    box-shadow:0 0 100px #ff00ff,0 0 50px #00ffff; display:none; z-index:40;
+    position:absolute; width:350px; background:rgba(0,0,0,0.6); border:3px solid #ff00ff;
+    box-shadow:0 0 120px #ff00ff; z-index:40; display:none; image-rendering:pixelated;
 }
-.virus-window img { width:100%; display:block; }
+.virus-titlebar {
+    background:#ff00ff; color:#000; padding:4px; font-size:1em; text-align:left;
+    border-bottom:2px solid #00ffff;
+}
+.virus-content { padding:4px; }
+
+.fake-cursor {
+    position:absolute; width:36px; height:36px; background:url('https://files.catbox.moe/070iyo.mov') no-repeat center/contain;
+    z-index:60; pointer-events:none; opacity:0;
+}
+
+#pulse-display {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-size:2em; text-align:center; max-width:80%; color:#ff00ff; z-index:25; display:none;
+    text-shadow:2px 2px #00ffff, -2px -2px #ff00ff;
+}
 </style>
 </head>
 <body>
 <div id="container">
+    <div class="scanlines"></div>
+    <div id="tribute-float" onclick="window.open('https://throne.com/cannibalprncss','_blank')">THRONE</div>
 
-<video id="intro-video" autoplay muted></video>
+    <video id="video" autoplay playsinline muted></video>
 
-<div id="start-paw">
-    <img src="https://i.ibb.co/CHT1YTP/cute-paw.png" alt="paw">
-    <span>Click Me 💖</span>
-</div>
+    <div id="start-paw" onclick="startHunt()">
+        <img src="https://files.catbox.moe/070iyo.mov">
+        <div id="start-text">YOU wanted this</div>
+    </div>
 
-<div id="state-display"></div>
+    <div id="state-display"></div>
 
-<a id="tribute-link" href="https://throne.com/cannibalprncss" target="_blank">THRONE</a>
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+        <div id="progress-text">PAWRRUPTION 0%</div>
+    </div>
 
-<div id="progress-container">
-    <div id="progress-bar"></div>
-    <div id="progress-text">PAWRRUPTION 0%</div>
-</div>
+    <div id="virus-window" class="virus-window">
+        <div class="virus-titlebar">VIRUS DETECTED — PREY SPOTTED</div>
+        <div class="virus-content"><img id="virus-gif" src="" style="width:100%;"></div>
+    </div>
 
+    <div id="pulse-display"></div>
 </div>
 
 <audio id="audio" src="https://files.catbox.moe/of5w5z.mp3" preload="auto"></audio>
 
 <script>
-const introVideos = [
-    {src:'https://files.catbox.moe/070iyo.mov', text:'hi click slut'},
-    {src:'https://files.catbox.moe/rtw280.mp4', text:'guess what i found'},
-    {src:'https://files.catbox.moe/ykncjz.mp4', text:'YOU!!!'}
+let flashCount=0; let currentState=""; 
+const popupGifs=[
+"https://files.catbox.moe/14gid0.gif",
+"https://files.catbox.moe/gvjp5u.gif",
+"https://files.catbox.moe/dh1yx0.gif",
+"https://files.catbox.moe/75805g.gif",
+"https://files.catbox.moe/axti3y.gif",
+"https://files.catbox.moe/09hw7w.gif",
+"https://files.catbox.moe/cfkgp5.gif"
 ];
-const popups = [
-    'https://files.catbox.moe/14gid0.gif',
-    'https://files.catbox.moe/gvjp5u.gif',
-    'https://files.catbox.moe/dh1yx0.gif',
-    'https://files.catbox.moe/75805g.gif',
-    'https://files.catbox.moe/axti3y.gif',
-    'https://files.catbox.moe/09hw7w.gif',
-    'https://files.catbox.moe/cfkgp5.gif'
+const threats=[
+"i know exactly where you are in {STATE}… and i’m coming for you 😏",
+"ohhh, {STATE} looks fun tonight… can you feel me watching?",
+"don’t even think about hiding in {STATE}… i’ll find you",
+"every little move you make in {STATE} makes me want to play…",
+"guess who’s thinking about {STATE}? yep, ME… and it’s all about you",
+"i see you leaking in {STATE}… naughty little thing",
+"don’t get too comfortable in {STATE}… i’ll be there any second",
+"{STATE} has no idea what’s coming… but YOU do, don’t you?",
+"you smell so sweet in {STATE}… i might just ruin you",
+"FINAL WARNING — pack your stuff, {STATE}… i’m coming to have my fun"
 ];
-const threats = [
-    "Mmm I can already smell your fur in {STATE}...",
-    "Thinking about taking a little trip to {STATE} tonight...",
-    "I might just mess with you in {STATE}...",
-    "Imagine me pinning you down in {STATE}...",
-    "Gonna ruin your vibe in {STATE} shamelessly...",
-    "I know exactly where you are in {STATE}...",
-    "You're mine in {STATE}, I can’t resist...",
-    "I see you quivering in {STATE}...",
-    "Oh, {STATE}, you’re gonna regret teasing me...",
-    "FINAL phase — I’m coming for you in {STATE}!"
+const videos=[
+"https://files.catbox.moe/070iyo.mov",
+"https://files.catbox.moe/rtw280.mp4",
+"https://files.catbox.moe/ykncjz.mp4"
 ];
 
-let currentState="", flashCount=0;
-
-const videoEl = document.getElementById('intro-video');
-const pawEl = document.getElementById('start-paw');
-const stateEl = document.getElementById('state-display');
-const audioEl = document.getElementById('audio');
-const progressContainer = document.getElementById('progress-container');
-const progressBar = document.getElementById('progress-bar');
-const progressText = document.getElementById('progress-text');
-
-let introIndex = 0;
-
-function playIntro() {
-    if(introIndex >= introVideos.length){
-        videoEl.style.display='none';
-        pawEl.style.display='block';
-        return;
-    }
-    videoEl.src=introVideos[introIndex].src;
-    videoEl.style.display='block';
-    videoEl.play();
-    videoEl.onended=()=>{
-        introIndex++;
-        playIntro();
-    };
+function showIntroVideos(){
+    const video=document.getElementById('video'); let i=0;
+    video.src=videos[0]; video.style.display='block'; video.play();
+    video.onended=()=>{ i++; if(i<videos.length){ video.src=videos[i]; video.play(); } else { video.style.display='none'; document.getElementById('start-paw').style.display='block'; } };
 }
 
-pawEl.onclick=()=>{ 
-    pawEl.style.display='none';
-    requestLocation();
-};
+function startHunt(){ document.getElementById('start-paw').style.display='none'; getLocation(); }
 
-function requestLocation() {
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(pos=>{
-            const lat=pos.coords.latitude, lon=pos.coords.longitude;
-            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`)
-            .then(r=>r.json())
-            .then(data=>{currentState=data.principalSubdivision||"Unknown"; startPhases();})
-            .catch(()=>{currentState="Unknown"; startPhases();});
-        }, ()=>{currentState="Unknown"; startPhases();});
-    } else {currentState="Unknown"; startPhases();}
+function getLocation(){
+    navigator.geolocation.getCurrentPosition(
+        (pos)=>{ currentState="your area"; document.getElementById('state-display').innerHTML=`LOCATION LOCKED: ${currentState}`; document.getElementById('state-display').style.display='block'; startPhases(); },
+        ()=>alert("PERMISSION DENIED?\nWeak prey."), { enableHighAccuracy:true, timeout:15000 }
+    );
 }
 
 function startPhases(){
-    stateEl.innerHTML=`LOCATION LOCKED: ${currentState}`;
-    stateEl.style.display='block';
-    progressContainer.style.display='block';
-    audioEl.play().catch(()=>{});
-    const interval=setInterval(()=>{
-        flashCount++;
-        progressBar.style.width=(flashCount*10)+'%';
-        progressText.innerHTML=`PAWRRUPTION ${flashCount*10}%`;
-
-        // show random popup
-        const popup = document.createElement('div');
-        popup.className='virus-window';
-        const img = document.createElement('img');
-        img.src=popups[Math.floor(Math.random()*popups.length)];
-        popup.appendChild(img);
-        popup.style.top=(Math.random()*70+10)+'%';
-        popup.style.left=(Math.random()*70+10)+'%';
-        popup.style.transform=`rotate(${Math.random()*30-15}deg)`;
-        document.getElementById('container').appendChild(popup);
-        popup.style.display='block';
-        setTimeout(()=>{popup.remove();},2000);
-
-        // threat text update
-        stateEl.innerHTML=threats[flashCount-1].replace("{STATE}",currentState);
-
-        audioEl.currentTime=0; audioEl.play().catch(()=>{});
-
-        if(flashCount>=10){
-            clearInterval(interval);
-            setTimeout(()=>{window.location.href='https://throne.com/cannibalprncss';},2000);
-        }
-    },2000);
+    const audio=document.getElementById('audio'); audio.volume=0.5; audio.play().catch(()=>{});
+    document.getElementById('pulse-display').style.display='block'; setInterval(pulseFlash,19000); pulseFlash();
 }
 
-window.onload=()=>{playIntro();};
+function pulseFlash(){
+    flashCount++; const text=threats[flashCount-1].replace("{STATE}",currentState);
+    document.getElementById('pulse-display').innerHTML=text;
+    const progress=Math.min(flashCount*10,100); document.getElementById('progress-bar').style.width=progress+'%'; document.getElementById('progress-text').innerHTML=`PAWRRUPTION ${progress}%`;
+    const virus=document.getElementById('virus-window'); const gif=document.getElementById('virus-gif'); gif.src=popupGifs[Math.floor(Math.random()*popupGifs.length)];
+    const top=10+Math.random()*70; const left=8+Math.random()*74; virus.style.top=`${top}%`; virus.style.left=`${left}%`; virus.style.transform=`rotate(${Math.random()*38-19}deg)`; virus.style.display='block';
+    const cursor=document.createElement('div'); cursor.className='fake-cursor'; cursor.style.top=`${top+15}%`; cursor.style.left=`${left+12}%`; cursor.style.opacity='1'; document.getElementById('container').appendChild(cursor);
+    setTimeout(()=>{cursor.style.opacity='0'; setTimeout(()=>cursor.remove(),800)},550);
+    const audio=document.getElementById('audio'); audio.currentTime=0; audio.volume=Math.min(0.5+flashCount/10*0.5,1); audio.play().catch(()=>{});
+    if(flashCount===10) setTimeout(()=>window.location.href='https://throne.com/cannibalprncss',3800);
+    setTimeout(()=>virus.style.display='none',2100);
+}
+
+window.onload=()=>{
+    document.addEventListener('contextmenu',e=>e.preventDefault());
+    document.addEventListener('keydown',e=>{if(e.key==="Escape"){alert("NO ESCAPE FROM MY FANGS."); e.preventDefault();}});
+    history.pushState(null,null,location.href); window.onpopstate=()=>history.pushState(null,null,location.href);
+    showIntroVideos();
+};
 </script>
 </body>
 </html>
